@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Даниил Гожальский](https://up.htmlacademy.ru/javascript/19/user/1173773).
-* Наставник: `Неизвестно`.
+* Наставник: [Дмитрий Гуляев](https://up.htmlacademy.ru/adaptive/18/user/87930).
 
 ---
 
