@@ -3,7 +3,7 @@
 // var offerFeaturesArray = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 // var offerTypesArray = ['palace', 'flat', 'house', 'bungalo'];
 // var offerTitleArray = ['Объект1', 'Объект2', 'Объект3', 'Объект4', 'Объект5', 'Объект6', 'Объект7', 'Объект8'];
-var numberOfOffers = 8;
+var NUMBER_OF_OFFERS = 8;
 var priceMin = 0;
 var priceMax = 10000;
 var roomsMin = 1;
@@ -49,13 +49,13 @@ var makeOffer = function (offersNumber, avatarNumber,
   var features = [];
   var photos = [];
 
-  for (i = 0; i < offersNumber; i++) {
+  for (var i = 0; i < offersNumber; i++) {
     var preIndex = i + 1;
     offerTitleArray[i] = 'Объект' + preIndex;
     offerDescriptionArray[i] = 'Описание' + preIndex;
   }
 
-  for (var i = 0; i < offerFeatures; i++) {
+  for (i = 0; i < offerFeatures; i++) {
     features[i] = offerFeaturesArray[randomInteger(0, offerFeatures - 1)];
   }
 
@@ -94,23 +94,42 @@ var makeOffersArray = function (offersNumber) {
   // console.log(offersArray);
   return offersArray;
 };
-// При выводе в консоль получается 8 массивов вместо одного - то есть 64 объекта...
+
 var renderPin = function (oneOffer) {
-  var pinElement = mapPinsTemplate.cloneNode(true);
+  // var arrayOfData = [];
+  for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
+    var pinElement = mapPinsTemplate.cloneNode(true);
 
-  pinElement.querySelector('.map__pin').style = 'left: ' + oneOffer[i].location.x + 'px; top:' + oneOffer[i].location.y + 'px;';
-  pinElement.querySelector('img').src = oneOffer[i].author.avatar;
-  pinElement.querySelector('img').alt = oneOffer[i].offer.title;
+    pinElement.querySelector('.map__pin').style = 'left: ' + oneOffer[i].location.x + 'px; top:' + oneOffer[i].location.y + 'px;';
+    pinElement.querySelector('img').src = oneOffer[i].author.avatar;
+    pinElement.querySelector('img').alt = oneOffer[i].offer.title;
 
+    // arrayOfData[i] = pinElement;
+  }
+  // console.log(arrayOfData);
   return pinElement;
+  // return arrayOfData;
 };
 
+// console.log(renderPin(makeOffersArray(NUMBER_OF_OFFERS)));
 var fragmentPins = document.createDocumentFragment();
-for (var i = 0; i < numberOfOffers; i++) {
-  fragmentPins.appendChild(renderPin(makeOffersArray(numberOfOffers)));
-}
+// for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
+// console.log(renderPin(makeOffersArray(NUMBER_OF_OFFERS)));
+// fragmentPins.appendChild(renderPin(makeOffersArray(NUMBER_OF_OFFERS)));
+// mapPinsList.appendChild(fragmentPins);
+// }
 
+for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
+  fragmentPins.appendChild(renderPin(makeOffersArray(NUMBER_OF_OFFERS)));
+}
 mapPinsList.appendChild(fragmentPins);
+// var allPins = renderPin(makeOffersArray(8));
+// console.log(allPins);
+/* for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
+  fragmentPins.appendChild(allPins);
+}
+*/
+// mapPinsList.appendChild(fragmentPins);
 
 document.querySelector('.map').classList.remove('map--faded');
 
