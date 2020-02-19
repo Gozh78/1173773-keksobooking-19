@@ -121,7 +121,7 @@ var mapFiltersSelect = mapFiltersContainer.querySelectorAll('select');
 var mapFiltersFieldset = mapFiltersContainer.querySelector('fieldset');
 var addressInput = adForm.querySelector('#address');
 var adFormRoomNumber = adForm.querySelector('#room_number');
-var adFormRoomNumberOptions = adFormRoomNumber.options;
+// var adFormRoomNumberOptions = adFormRoomNumber.options;
 var adFormCapacity = adForm.querySelector('#capacity');
 var adFormCapacitieOptions = adFormCapacity.options;
 
@@ -133,17 +133,17 @@ var setDisabledAttribute = function (array) {
   for (var i = 0; i < array.length; i++) {
     array[i].setAttribute('disabled', 'disabled');
   }
-}
+};
 
 var removeDisabledAttribute = function (array) {
   for (var i = 0; i < array.length; i++) {
     array[i].removeAttribute('disabled');
   }
-}
+};
 
 var setAddressValue = function (offerAddressX, offerAddressY) {
   addressInput.value = offerAddressX + ', ' + offerAddressY;
-}
+};
 
 setDisabledAttribute(adFormFieldsets);
 setDisabledAttribute(mapFiltersSelect);
@@ -154,7 +154,7 @@ setAddressValue(MAIN_PIN_LEFT_TOP_COORDINATE_X + PIN_HALF_WIDTH, MAIN_PIN_LEFT_T
 // Активное состояние
 
 var mapPinMain = mapPinsList.querySelector('.map__pin--main');
-var mapPinMainDead = mapPinMain;
+// var mapPinMainDead = mapPinMain;
 var LEFT_MOUSE_BUTON_RETURN = 0;
 var ENTER_KEY = 'Enter';
 
@@ -207,19 +207,18 @@ adFormReset.addEventListener('mousedown', function (evt) {
   }
 });
 
-adFormReset.addEventListener('keydown', function () {
-    if (evt.key === ENTER_KEY) {
-      resetForm();
-    }
+adFormReset.addEventListener('keydown', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    resetForm();
+  }
 });
 
 // сначала тоже должно быть
 adFormCapacitieOptions[0].setAttribute('disabled', 'disabled');
 adFormCapacitieOptions[1].setAttribute('disabled', 'disabled');
 adFormCapacitieOptions[3].setAttribute('disabled', 'disabled');
+
 adFormRoomNumber.addEventListener('change', function () {
-  var index = adFormRoomNumber.selectedIndex;
-  console.log(index);
   if (adFormRoomNumber.selectedIndex === 0) {
     adFormCapacitieOptions[2].removeAttribute('disabled');
     adFormCapacitieOptions[0].setAttribute('disabled', 'disabled');
@@ -245,8 +244,8 @@ adFormRoomNumber.addEventListener('change', function () {
 
 /*
 adFormRoomNumber.addEventListener('invalid', function (evt) {
-  if (adFormRoomNumber.selectedIndex === 2/*&& !adFormCapacitieOptions[2].selected*///) {
-  /*  adFormRoomNumber.setCustomValidity('1 комната - для 1 гостя');
+  if (adFormRoomNumber.selectedIndex === 2/*&& !adFormCapacitieOptions[2].selected*/// ) {
+/* adFormRoomNumber.setCustomValidity('1 комната - для 1 гостя');
   }
 });
 */
@@ -267,11 +266,11 @@ adFormRoomNumber.addEventListener('invalid', function (evt) {
   if (adFormRoomNumber.selectedIndex) {
 
   }*/
-  /*
+/*
   if (adFormRoomNumbersOption[0] !== adFormCapacitiesOption[2]) {
     adFormRoomNumber.setCustomValidity('1 комната - для 1 гостя');
   }*/
-/*});*/
+/* });*/
 /*
 var roomsCapacityValidator = function (rooms, capacity) {
   for (var i = 0; i < rooms.length; i++) {
