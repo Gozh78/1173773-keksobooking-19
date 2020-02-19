@@ -171,7 +171,7 @@ mapPinMain.addEventListener('mousedown', function (evt) {
     setPageActive();
     setAddressValue(MAIN_PIN_LEFT_TOP_COORDINATE_X + PIN_HALF_WIDTH, MAIN_PIN_LEFT_TOP_COORDINATE_Y + PIN_WIDTH + PIN_PEAK_HEIGHT);
   }
-});
+}); // Как можно остановить выполнение функции? Потому что при повторных кликах или нажатиях Enter возникает всё больше и больше пинов
 
 mapPinMain.addEventListener('keydown', function (evt) {
   if (evt.key === ENTER_KEY) {
@@ -184,9 +184,9 @@ var adFormElementSubmit = adForm.querySelector('.ad-form__element--submit');
 var adFormReset = adFormElementSubmit.querySelector('.ad-form__reset');
 
 var resetForm = function () {
-  document.querySelector('.map').classList.add('map--faded'); // работает
+  document.querySelector('.map').classList.add('map--faded');
 
-  var mapButtons = mapPinsList.querySelectorAll('button'); // не работает
+  var mapButtons = mapPinsList.querySelectorAll('button');
   for (var i = 1; i < mapButtons.length; i++) {
     mapButtons[i].remove();
   }
@@ -195,10 +195,10 @@ var resetForm = function () {
     fragmentPins.appendChild(renderPin(makeOffersArray(numberOfOffers)));
   }
   */
-  setDisabledAttribute(adFormFieldsets); // не работает
-  setDisabledAttribute(mapFiltersSelect); // не работает
-  mapFiltersFieldset.setAttribute('disabled', 'disabled'); // не работает
-  setAddressValue(MAIN_PIN_LEFT_TOP_COORDINATE_X + PIN_HALF_WIDTH, MAIN_PIN_LEFT_TOP_COORDINATE_Y + PIN_HALF_WIDTH); // не работает, проверить, что не так
+  setDisabledAttribute(adFormFieldsets);
+  setDisabledAttribute(mapFiltersSelect);
+  mapFiltersFieldset.setAttribute('disabled', 'disabled');
+  setAddressValue(MAIN_PIN_LEFT_TOP_COORDINATE_X + PIN_HALF_WIDTH, MAIN_PIN_LEFT_TOP_COORDINATE_Y + PIN_HALF_WIDTH);
 };
 
 adFormReset.addEventListener('mousedown', function (evt) {
