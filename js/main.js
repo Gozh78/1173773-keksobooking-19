@@ -1,8 +1,5 @@
 'use strict';
-// var avatarTemplate = '';
-// var offerFeaturesArray = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-// var offerTypesArray = ['palace', 'flat', 'house', 'bungalo'];
-// var offerTitleArray = ['Объект1', 'Объект2', 'Объект3', 'Объект4', 'Объект5', 'Объект6', 'Объект7', 'Объект8'];
+
 var NUMBER_OF_OFFERS = 8;
 var priceMin = 0;
 var priceMax = 10000;
@@ -20,11 +17,7 @@ var randomInteger = function (min, max) {
   var random = min + Math.random() * (max + 1 - min);
   return Math.floor(random);
 };
-/*
-var createRandomParameters = function () {
 
-}
-*/
 var mapPinsList = document.querySelector('.map__pins');
 var mapPinsTemplate = document.querySelector('#pin').content;
 
@@ -75,7 +68,7 @@ var makeOffer = function (offersNumber, avatarNumber,
   offerObject.offer.checkout = offerCheckArray[offerCheckOut];
   offerObject.offer.features = features;
   offerObject.offer.description = offerDescriptionArray[randomInteger(0, offersNumber - 1)];
-  offerObject.offer.photos = photos;// offerPhotosArray[randomInteger(0, offerPhotos - 1)];
+  offerObject.offer.photos = photos;
   offerObject.location.x = locationX;
   offerObject.location.y = locationY;
 
@@ -89,100 +82,24 @@ var makeOffersArray = function (offersNumber) {
         randomInteger(roomsMin, roomsMax), randomInteger(guestsMin, guestsMax), randomInteger(0, offerCheckArray.length - 1),
         randomInteger(0, offerCheckArray.length - 1), randomInteger(1, offerFeaturesArray.length), randomInteger(1, offerPhotosArray.length),
         randomInteger(positionPinMinX, positionPinMaxX), randomInteger(positionPinMinY, positionPinMaxY));
-    // console.log(offersArray[i]);
   }
-  // console.log(offersArray);
   return offersArray;
 };
 
 var renderPin = function (oneOffer) {
-   var arrayOfData = [];
-   for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
+  var fragmentPins = document.createDocumentFragment();
+  for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
     var pinElement = mapPinsTemplate.cloneNode(true);
 
     pinElement.querySelector('.map__pin').style = 'left: ' + oneOffer[i].location.x + 'px; top:' + oneOffer[i].location.y + 'px;';
     pinElement.querySelector('img').src = oneOffer[i].author.avatar;
     pinElement.querySelector('img').alt = oneOffer[i].offer.title;
 
-    arrayOfData.push(pinElement);
-    // arrayOfData[i] = pinElement;
-  }
-  // console.log(arrayOfData);
-  // return pinElement;
-  return arrayOfData;
-};
-
-// console.log(renderPin(makeOffersArray(NUMBER_OF_OFFERS)));
-var fragmentPins = document.createDocumentFragment();
-// for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
-// console.log(renderPin(makeOffersArray(NUMBER_OF_OFFERS)));
-// fragmentPins.appendChild(renderPin(makeOffersArray(NUMBER_OF_OFFERS)));
-// mapPinsList.appendChild(fragmentPins);
-// }
-
- // for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
-makeOffersArray(NUMBER_OF_OFFERS);
-  fragmentPins.appendChild(renderPin(makeOffersArray(NUMBER_OF_OFFERS)));
- //}
-mapPinsList.appendChild(fragmentPins);
-// var allPins = renderPin(makeOffersArray(8));
-// console.log(allPins);
-/* for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
-  fragmentPins.appendChild(allPins);
-}
-*/
-// mapPinsList.appendChild(fragmentPins);
-
-document.querySelector('.map').classList.remove('map--faded');
-
-/* var renderPin = function (oneOffer) {
-  var pinElement = mapPinsTemplate.cloneNode(true);
-
-  pinElement.querySelector('.map__pin').style = 'left: ' + oneOffer.location.x + 'px; top:' + oneOffer.location.y + 'px;';
-  pinElement.querySelector('img').src = oneOffer.author.avatar;
-  pinElement.querySelector('img').alt = oneOffery.offer.title;
-
-  return pinElement;
-};
-
-var fragmentPins = document.createDocumentFragment();
-
-var makeFragment = function (allOffers) {
-  for (var i = 0; i < allOffers; i++) {
-    fragmentPins.appendChild(renderPin(makeOffersArray(allOffers)));
+    fragmentPins.appendChild(pinElement);
   }
   return fragmentPins;
-}
+};
 
-mapPinsList.appendChild(makeFragment(8));
-*/
-/*
-var offers = [
-  {
-    author: {
-      avatar: ''строка, адрес изображения вида img/avatars/user{{xx}}.png, где {{xx}} это число от 1 до 8 с ведущим нулём. Например, 01, 02 и т. д. Адреса изображений не повторяются
-    },
+mapPinsList.appendChild(renderPin(makeOffersArray(NUMBER_OF_OFFERS)));
 
-    offer: {
-      title: строка, заголовок предложения
-      address: строка, адрес предложения. Для простоты пусть пока представляет собой запись вида "{{location.x}}, {{location.y}}", например, "600, 350",
-      price: число, стоимость,
-      type: строка с одним из четырёх фиксированных значений: palace, flat, house или bungalo,
-      rooms: число, количество комнат,
-      guests: число, количество гостей, которое можно разместить,
-      checkin: строка с одним из трёх фиксированных значений: 12:00, 13:00 или 14:00,
-      checkout: строка с одним из трёх фиксированных значений: 12:00, 13:00 или 14:00,
-      features: массив строк случайной длины из ниже предложенных: "wifi", "dishwasher", "parking", "washer", "elevator", "conditioner",
-      description: строка с описанием,
-      photos: массив строк случайной длины, содержащий адреса фотографий "http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"
-    },
-
-    location: {
-      x: случайное число, координата x метки на карте. Значение ограничено размерами блока, в котором перетаскивается метка.
-      y: случайное число, координата y метки на карте от 130 до 630.
-    }
-  },
-
-
-]
-*/
+document.querySelector('.map').classList.remove('map--faded');
