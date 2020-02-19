@@ -96,19 +96,20 @@ var makeOffersArray = function (offersNumber) {
 };
 
 var renderPin = function (oneOffer) {
-  // var arrayOfData = [];
-  for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
+   var arrayOfData = [];
+   for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
     var pinElement = mapPinsTemplate.cloneNode(true);
 
     pinElement.querySelector('.map__pin').style = 'left: ' + oneOffer[i].location.x + 'px; top:' + oneOffer[i].location.y + 'px;';
     pinElement.querySelector('img').src = oneOffer[i].author.avatar;
     pinElement.querySelector('img').alt = oneOffer[i].offer.title;
 
+    arrayOfData.push(pinElement);
     // arrayOfData[i] = pinElement;
   }
   // console.log(arrayOfData);
-  return pinElement;
-  // return arrayOfData;
+  // return pinElement;
+  return arrayOfData;
 };
 
 // console.log(renderPin(makeOffersArray(NUMBER_OF_OFFERS)));
@@ -119,9 +120,10 @@ var fragmentPins = document.createDocumentFragment();
 // mapPinsList.appendChild(fragmentPins);
 // }
 
-for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
+ // for (var i = 0; i < NUMBER_OF_OFFERS; i++) {
+makeOffersArray(NUMBER_OF_OFFERS);
   fragmentPins.appendChild(renderPin(makeOffersArray(NUMBER_OF_OFFERS)));
-}
+ //}
 mapPinsList.appendChild(fragmentPins);
 // var allPins = renderPin(makeOffersArray(8));
 // console.log(allPins);
