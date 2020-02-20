@@ -126,6 +126,13 @@ var adFormCapacity = adForm.querySelector('#capacity');
 var adFormCapacitieOptions = adFormCapacity.options;
 
 var setDisabledAttribute = function (arr) {
+  if (Object.keys(arr).length === 0) {
+    arr.setAttribute('disabled', 'disabled');
+  } else {
+    for (var i = 0; i < arr.length; i++) {
+      arr[i].setAttribute('disabled', 'disabled');
+    }
+  }
   /* if (!Array.isArray(arr)) {
     arr.setAttribute('disabled', 'disabled');
   } else {
@@ -133,20 +140,33 @@ var setDisabledAttribute = function (arr) {
       arr[i].setAttribute('disabled', 'disabled');
     }
   }*/
-  var array = Array.from(arr);
+  // var array = Array.from(arr);
   // console.log(array);
-  if (array.length === 0) {
+  /* if (array.length === 0) {
     arr.setAttribute('disabled', 'disabled');
   } else {
     for (var i = 0; i < arr.length; i++) {
       arr[i].setAttribute('disabled', 'disabled');
     }
   }
+  */
 };
+/*
+console.log(typeof mapFiltersFieldset);
+console.log(typeof adFormFieldsets);
+console.log(typeof mapFiltersSelect);
+*/
 
-var removeDisabledAttribute = function (array) {
-  for (var i = 0; i < array.length; i++) {
+var removeDisabledAttribute = function (arr) {
+  /* for (var i = 0; i < array.length; i++) {
     array[i].removeAttribute('disabled');
+  }*/
+  if (Object.keys(arr).length === 0) {
+    arr.removeAttribute('disabled');
+  } else {
+    for (var i = 0; i < arr.length; i++) {
+      arr[i].removeAttribute('disabled');
+    }
   }
 };
 
