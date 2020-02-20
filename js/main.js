@@ -91,7 +91,7 @@ var makeOffersArray = function (offersNumber) {
     offersArray[i] = makeOffer(offersNumber, i + 1, randomInteger(priceMin, priceMax), randomInteger(0, offerTypesArray.length - 1),
         randomInteger(roomsMin, roomsMax), randomInteger(guestsMin, guestsMax), randomInteger(0, offerCheckArray.length - 1),
         randomInteger(0, offerCheckArray.length - 1), randomInteger(1, offerFeaturesArray.length), randomInteger(1, offerPhotosArray.length),
-        randomInteger(MAP_MIN_COORDINATE_X + PIN_WIDTH, MAP_MAX_COORDINATE_X - PIN_WIDTH), randomInteger(MAP_MIN_COORDINATE_Y + PIN_WIDTH, MAP_MAX_COORDINATE_Y - PIN_WIDTH));
+        randomInteger(MAP_MIN_COORDINATE_X + PIN_HALF_WIDTH, MAP_MAX_COORDINATE_X - PIN_WIDTH), randomInteger(MAP_MIN_COORDINATE_Y, MAP_MAX_COORDINATE_Y));
   }
   return offersArray;
 };
@@ -125,13 +125,22 @@ var adFormRoomNumber = adForm.querySelector('#room_number');
 var adFormCapacity = adForm.querySelector('#capacity');
 var adFormCapacitieOptions = adFormCapacity.options;
 
-var setDisabledAttribute = function (array) {
-  /* if (!Array.isArray(array)) {
-    array.setAttribute('disabled', 'disabled');
-  } else {}*/
-  // Какое должно быть условие для того, чтобы функция заработала не только с массивами?
-  for (var i = 0; i < array.length; i++) {
-    array[i].setAttribute('disabled', 'disabled');
+var setDisabledAttribute = function (arr) {
+  /* if (!Array.isArray(arr)) {
+    arr.setAttribute('disabled', 'disabled');
+  } else {
+    for (var i = 0; i < arr.length; i++) {
+      arr[i].setAttribute('disabled', 'disabled');
+    }
+  }*/
+  var array = Array.from(arr);
+  // console.log(array);
+  if (array.length === 0) {
+    arr.setAttribute('disabled', 'disabled');
+  } else {
+    for (var i = 0; i < arr.length; i++) {
+      arr[i].setAttribute('disabled', 'disabled');
+    }
   }
 };
 
@@ -144,11 +153,11 @@ var removeDisabledAttribute = function (array) {
 var setAddressValue = function (offerAddressX, offerAddressY) {
   addressInput.value = offerAddressX + ', ' + offerAddressY;
 };
-
+// console.log(adFormFieldsets);
 setDisabledAttribute(adFormFieldsets);
 setDisabledAttribute(mapFiltersSelect);
-// setDisabledAttribute(mapFiltersFieldset);
-mapFiltersFieldset.setAttribute('disabled', 'disabled');
+setDisabledAttribute(mapFiltersFieldset);
+// mapFiltersFieldset.setAttribute('disabled', 'disabled');
 setAddressValue(MAIN_PIN_LEFT_TOP_COORDINATE_X + PIN_HALF_WIDTH, MAIN_PIN_LEFT_TOP_COORDINATE_Y + PIN_HALF_WIDTH);
 
 // Активное состояние
@@ -159,11 +168,18 @@ var LEFT_MOUSE_BUTON_RETURN = 0;
 var ENTER_KEY = 'Enter';
 
 var setPageActive = function () {
+  var mapButtons = mapPinsList.querySelectorAll('button');
   document.querySelector('.map').classList.remove('map--faded');
+
+  for (var i = 1; i < mapButtons.length; i++) {
+    mapButtons[i].remove();
+  }
+
   mapPinsList.appendChild(renderPin(makeOffersArray(NUMBER_OF_OFFERS)));
   removeDisabledAttribute(adFormFieldsets);
   removeDisabledAttribute(mapFiltersSelect);
-  mapFiltersFieldset.removeAttribute('disabled', 'disabled');
+  removeDisabledAttribute(mapFiltersFieldset);
+  // mapFiltersFieldset.removeAttribute('disabled', 'disabled');
 };
 
 mapPinMain.addEventListener('mousedown', function (evt) {
@@ -197,7 +213,8 @@ var resetForm = function () {
   */
   setDisabledAttribute(adFormFieldsets);
   setDisabledAttribute(mapFiltersSelect);
-  mapFiltersFieldset.setAttribute('disabled', 'disabled');
+  setDisabledAttribute(mapFiltersFieldset);
+  // mapFiltersFieldset.setAttribute('disabled', 'disabled');
   setAddressValue(MAIN_PIN_LEFT_TOP_COORDINATE_X + PIN_HALF_WIDTH, MAIN_PIN_LEFT_TOP_COORDINATE_Y + PIN_HALF_WIDTH);
 };
 
