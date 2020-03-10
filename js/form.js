@@ -7,6 +7,8 @@
   var adForm = document.querySelector('.ad-form');
   var adFormFieldsets = adForm.querySelectorAll('fieldset');
   var mapFiltersContainer = document.querySelector('.map__filters-container');
+  var mapFilters = mapFiltersContainer.querySelector('.map__filters');
+  var filterHousingType = mapFilters.querySelector('#housing-type');
   var mapFiltersSelect = mapFiltersContainer.querySelectorAll('select');
   var mapFiltersFieldset = mapFiltersContainer.querySelector('fieldset');
   var addressInput = adForm.querySelector('#address');
@@ -16,6 +18,10 @@
   var mapPinMain = mapPinsList.querySelector('.map__pin--main');
   var adFormElementSubmit = adForm.querySelector('.ad-form__element--submit');
   var adFormReset = adFormElementSubmit.querySelector('.ad-form__reset');
+
+  var map = document.querySelector('.map');
+
+  var offersServer = [];
 
   // Неактивное состояние
 
@@ -71,12 +77,78 @@
       mapButtons[i].remove();
     }
 
-    // mapPinsList.appendChild(window.map.renderPin(window.data.makeOffersArray(window.data.NUMBER_OF_OFFERS)));
-    window.backend.load(window.map.renderPin, window.backend.onLoadError);
-    removeDisabledAttribute(adFormFieldsets);
-    removeDisabledAttribute(mapFiltersSelect);
-    removeDisabledAttribute(mapFiltersFieldset);
+    var onLoadSuccess = function (data) {
+      offersServer = data;
+
+      var getFiveRandomElements = function () {
+        var dataCopy = offersServer.slice();
+        var initialDataLength = dataCopy.length;
+        var dataFiveElements = [];
+        for (i = 0; i < window.data.MAX_NUMBER_OF_OFFERS; i++) {
+          var randomNumber = window.util.randomInteger(0, initialDataLength - 1);
+          dataFiveElements[i] = dataCopy[randomNumber];
+          dataCopy.splice(randomNumber, 1);
+          initialDataLength = initialDataLength - 1;
+        }
+        return dataFiveElements;
+      };
+
+      window.map.renderPin(getFiveRandomElements());
+      window.cards.showCards();
+      window.cards.closeCards();
+
+      filterHousingType.addEventListener('change', function () {
+        var typeFilteredOffers;
+        if (filterHousingType.value === 'palace') {
+          typeFilteredOffers = offersServer.filter(function (oneOffer) {
+            return oneOffer.offer.type === 'palace';
+          });
+        } else if (filterHousingType.value === 'flat') {
+          typeFilteredOffers = offersServer.filter(function (oneOffer) {
+            return oneOffer.offer.type === 'flat';
+          });
+        } else if (filterHousingType.value === 'house') {
+          typeFilteredOffers = offersServer.filter(function (oneOffer) {
+            return oneOffer.offer.type === 'house';
+          });
+        } else if (filterHousingType.value === 'bungalo') {
+          typeFilteredOffers = offersServer.filter(function (oneOffer) {
+            return oneOffer.offer.type === 'bungalo';
+          });
+        } else if (filterHousingType.value === 'any') {
+          typeFilteredOffers = getFiveRandomElements();
+        }
+
+        mapButtons = mapPinsList.querySelectorAll('button');
+        for (i = 1; i < mapButtons.length; i++) {
+          mapButtons[i].remove();
+        }
+
+        window.map.renderPin(typeFilteredOffers);
+        window.cards.showCards();
+        window.cards.closeCards();
+      });
+
+      removeDisabledAttribute(adFormFieldsets);
+      removeDisabledAttribute(mapFiltersSelect);
+      removeDisabledAttribute(mapFiltersFieldset);
+    };
+
+    window.backend.load(onLoadSuccess, window.backend.onLoadError);
   };
+
+  mapFilters.addEventListener('change', function () {
+    var mapCards = map.querySelectorAll('.map__card');
+    var mapButtons = mapPinsList.querySelectorAll('button');
+    // console.log(mapButtons);
+    for (var i = 0; i < mapButtons.length; i++) {
+      mapButtons[i].classList.remove('map__pin--active');
+    }
+
+    mapCards.forEach(function (item) {
+      item.classList.add('hidden');
+    });
+  });
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     window.util.ifLeftMouseEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
