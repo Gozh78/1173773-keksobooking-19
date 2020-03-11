@@ -68,6 +68,34 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
   */
+
+  var getFiveRandomElements = function (array) {
+    var dataCopy = [];
+    if (array) {
+      dataCopy = array;
+    } else {
+      dataCopy = offersServer.slice();
+    }
+
+    var initialDataLength = dataCopy.length;
+    var dataFiveElements = [];
+    var numberOffers;
+
+    if (dataCopy.length < window.data.MAX_NUMBER_OF_OFFERS) {
+      numberOffers = dataCopy.length;
+    } else {
+      numberOffers = window.data.MAX_NUMBER_OF_OFFERS;
+    }
+
+    for (var i = 0; i < numberOffers; i++) {
+      var randomNumber = window.util.randomInteger(0, initialDataLength - 1);
+      dataFiveElements[i] = dataCopy[randomNumber];
+      dataCopy.splice(randomNumber, 1);
+      initialDataLength = initialDataLength - 1;
+    }
+    return dataFiveElements;
+  };
+
   var setPageActive = function () {
     var mapButtons = mapPinsList.querySelectorAll('button');
     document.querySelector('.map').classList.remove('map--faded');
@@ -80,20 +108,9 @@
     var onLoadSuccess = function (data) {
       offersServer = data;
 
-      var getFiveRandomElements = function () {
-        var dataCopy = offersServer.slice();
-        var initialDataLength = dataCopy.length;
-        var dataFiveElements = [];
-        for (i = 0; i < window.data.MAX_NUMBER_OF_OFFERS; i++) {
-          var randomNumber = window.util.randomInteger(0, initialDataLength - 1);
-          dataFiveElements[i] = dataCopy[randomNumber];
-          dataCopy.splice(randomNumber, 1);
-          initialDataLength = initialDataLength - 1;
-        }
-        return dataFiveElements;
-      };
+      // window.map.renderPin(getFiveRandomElements());
 
-      window.map.renderPin(getFiveRandomElements());
+      window.cards.renderCards(getFiveRandomElements());
       window.cards.showCards();
       window.cards.closeCards();
 
@@ -124,9 +141,13 @@
           mapButtons[i].remove();
         }
 
-        window.map.renderPin(typeFilteredOffers);
-        window.cards.showCards();
+        window.cards.removeCards();
+
+        // window.map.renderPin(typeFilteredOffers);
+        window.cards.renderCards(getFiveRandomElements(typeFilteredOffers));
         window.cards.closeCards();
+        window.cards.showCards();
+
       });
 
       removeDisabledAttribute(adFormFieldsets);
@@ -153,7 +174,7 @@
   mapPinMain.addEventListener('mousedown', function (evt) {
     window.util.ifLeftMouseEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
         window.data.PIN_HALF_WIDTH, window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_WIDTH + window.data.PIN_PEAK_HEIGHT));
-  });
+  }, {once: true});
 
   mapPinMain.addEventListener('keydown', function (evt) {
     window.util.ifEnterEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +

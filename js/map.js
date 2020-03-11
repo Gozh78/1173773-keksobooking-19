@@ -20,7 +20,7 @@
 
     mapPinsList.appendChild(fragmentPins);
 
-    window.cards.renderCards(offers);
+    // window.cards.renderCards(offers);
   };
 
   window.map = {
