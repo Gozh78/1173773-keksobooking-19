@@ -7,60 +7,68 @@
   var mapCardTemplatePhotos = mapCardTemplate.querySelector('.popup__photos');
   // var mapCardTemplateFeatures = mapCardTemplate.querySelector('.popup__features');
 
+  var removeElementIfIncluded = function (array, arrayElement, element, className) {
+    if (!(array.includes(arrayElement))) {
+      element.querySelector(className).remove();
+    }
+  };
+
+  var getOfferType = function (type, element) {
+    var selectedType;
+    switch (type) {
+      case 'palace':
+        selectedType = element.querySelector('.popup__type').textContent = 'Дворец';
+        break;
+      case 'flat':
+        selectedType = element.querySelector('.popup__type').textContent = 'Квартира';
+        break;
+      case 'house':
+        selectedType = element.querySelector('.popup__type').textContent = 'Дом';
+        break;
+      case 'bungalo':
+        selectedType = element.querySelector('.popup__type').textContent = 'Бунгало';
+        break;
+    }
+    return selectedType;
+  };
+
+  var insertPhotos = function (photosArray, element, placeToInsert) {
+    for (var j = 0/* 1*/; j < photosArray.length; j++) {
+      // console.log(i + ': number of offer, ' + offers[i].offer.photos.length + ': array length, ' + j + ': number of photo');
+      // console.log(element);
+      // console.log(photosArray[j]);
+      element.src = photosArray[j];
+      placeToInsert.appendChild(element);
+    } // вставляется непонятное количество картинок, и нужно как-то избавиться от первого фото без ссылки
+  };
+
   var renderCards = function (offers) {
     var fragmentCards = document.createDocumentFragment();
+
     for (var i = 0; i < offers.length; i++) {
       var cardElement = mapCardTemplate.cloneNode(true);
+      var photoElement = cardElement.querySelector('.popup__photo').cloneNode(true);
 
       cardElement.querySelector('.popup__avatar').src = offers[i].author.avatar;
       cardElement.querySelector('.popup__title').textContent = offers[i].offer.title;
       cardElement.querySelector('.popup__text--address').textContent = offers[i].offer.address;
       cardElement.querySelector('.popup__text--price').innerHTML = offers[i].offer.price + '&#x20bd;' + '<span>/ночь</span>';
-
-      var getOfferType = function (type) {
-        var selectedType;
-        switch (type) {
-          case 'palace':
-            selectedType = cardElement.querySelector('.popup__type').textContent = 'Дворец';
-            break;
-          case 'flat':
-            selectedType = cardElement.querySelector('.popup__type').textContent = 'Квартира';
-            break;
-          case 'house':
-            selectedType = cardElement.querySelector('.popup__type').textContent = 'Дом';
-            break;
-          case 'bungalo':
-            selectedType = cardElement.querySelector('.popup__type').textContent = 'Бунгало';
-            break;
-        }
-        return selectedType;
-      };
-      getOfferType(offers[i].offer.type);
-
       cardElement.querySelector('.popup__text--capacity').textContent = offers[i].offer.rooms + ' комната(ы) для ' + offers[i].offer.guests + ' гостя(ей)';
       cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + offers[i].offer.checkin + ', выезд до ' + offers[i].offer.checkout;
       cardElement.querySelector('.popup__description').textContent = offers[i].offer.description;
 
-      var removeElementIfIncluded = function (arrayElement, className) {
-        if (!(offers[i].offer.features.includes(arrayElement))) {
-          cardElement.querySelector(className).remove();
-        }
-      };
+      getOfferType(offers[i].offer.type, cardElement);
 
-      removeElementIfIncluded('wifi', '.popup__feature--wifi');
-      removeElementIfIncluded('dishwasher', '.popup__feature--dishwasher');
-      removeElementIfIncluded('parking', '.popup__feature--parking');
-      removeElementIfIncluded('washer', '.popup__feature--washer');
-      removeElementIfIncluded('elevator', '.popup__feature--elevator');
-      removeElementIfIncluded('conditioner', '.popup__feature--conditioner');
+      removeElementIfIncluded(offers[i].offer.features, 'wifi', cardElement, '.popup__feature--wifi');
+      removeElementIfIncluded(offers[i].offer.features, 'dishwasher', cardElement, '.popup__feature--dishwasher');
+      removeElementIfIncluded(offers[i].offer.features, 'parking', cardElement, '.popup__feature--parking');
+      removeElementIfIncluded(offers[i].offer.features, 'washer', cardElement, '.popup__feature--washer');
+      removeElementIfIncluded(offers[i].offer.features, 'elevator', cardElement, '.popup__feature--elevator');
+      removeElementIfIncluded(offers[i].offer.features, 'conditioner', cardElement, '.popup__feature--conditioner');
 
-      var photoElement = mapCardTemplatePhotos.querySelector('.popup__photo').cloneNode(true);
-
-      for (var j = 0/* 1*/; j < offers[i].offer.photos.length; j++) {
-        // console.log(i + ': number of offer, ' + offers[i].offer.photos.length + ': array length, ' + j + ': number of photo');
-        photoElement.src = offers[i].offer.photos[j];
-        mapCardTemplatePhotos.appendChild(photoElement);
-      } // вставляется непонятное количество картинок, и нужно как-то избавиться от первого фото без ссылки
+      // console.log(offers[i].offer.photos.length);
+      // console.log(photoElement);
+      insertPhotos(offers[i].offer.photos, photoElement, mapCardTemplatePhotos);
 
       fragmentCards.appendChild(cardElement);
     }
