@@ -199,10 +199,20 @@
 
   adFormReset.addEventListener('mousedown', function (evt) {
     window.util.ifLeftMouseEventDoAction(evt, resetForm);
+    mapPinMain.addEventListener('mousedown', function () {
+      window.util.ifLeftMouseEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
+          window.data.PIN_HALF_WIDTH, window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_WIDTH + window.data.PIN_PEAK_HEIGHT));
+    }, {once: true});
+    window.cards.removeCards();
   });
 
   adFormReset.addEventListener('keydown', function (evt) {
     window.util.ifEnterEventDoAction(evt, resetForm);
+    mapPinMain.addEventListener('mousedown', function () {
+      window.util.ifLeftMouseEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
+          window.data.PIN_HALF_WIDTH, window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_WIDTH + window.data.PIN_PEAK_HEIGHT));
+    }, {once: true});
+    window.cards.removeCards();
   });
 
   // Валидация
