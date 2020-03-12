@@ -3,6 +3,7 @@
 (function () {
   var LEFT_MOUSE_BUTON_RETURN = 0;
   var ENTER_KEY = 'Enter';
+  var ESC_KEY = 'Escape';
 
   var randomInteger = function (min, max) {
     // случайное число от min до max включительно
@@ -14,6 +15,11 @@
     LEFT_MOUSE_BUTON_RETURN: LEFT_MOUSE_BUTON_RETURN,
     ENTER_KEY: ENTER_KEY,
     randomInteger: randomInteger,
+    ifEscEventDoAction: function (evt, action) {
+      if (evt.key === ESC_KEY) {
+        action();
+      }
+    },
     ifEnterEventDoAction: function (evt, action) {
       if (evt.key === ENTER_KEY) {
         action();

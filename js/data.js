@@ -2,7 +2,7 @@
 // модуль, который создаёт данные;
 
 (function () {
-  var NUMBER_OF_OFFERS = 8;
+  var MAX_NUMBER_OF_OFFERS = 5;
   var priceMin = 0;
   var priceMax = 10000;
   var roomsMin = 1;
@@ -84,7 +84,7 @@
   };
 
   window.data = {
-    NUMBER_OF_OFFERS: NUMBER_OF_OFFERS,
+    MAX_NUMBER_OF_OFFERS: MAX_NUMBER_OF_OFFERS,
     priceMin: priceMin,
     priceMax: priceMax,
     roomsMin: roomsMin,
