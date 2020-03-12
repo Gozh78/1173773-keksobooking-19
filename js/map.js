@@ -11,7 +11,7 @@
     for (var i = 0; i < offers.length; i++) {
       var pinElement = mapPinsTemplate.cloneNode(true);
 
-      pinElement.querySelector('.map__pin').style = 'left: ' + offers[i].location.x + 'px; top:' + offers[i].location.y + 'px;';
+      pinElement.querySelector('.map__pin').style = 'left: ' + (offers[i].location.x - window.data.PIN_HALF_WIDTH) + 'px; top:' + offers[i].location.y + 'px;';
       pinElement.querySelector('img').src = offers[i].author.avatar;
       pinElement.querySelector('img').alt = offers[i].offer.title;
 
@@ -20,7 +20,6 @@
 
     mapPinsList.appendChild(fragmentPins);
 
-    // window.cards.renderCards(offers);
   };
 
   window.map = {

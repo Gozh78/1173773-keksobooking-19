@@ -55,19 +55,6 @@
       window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_HALF_WIDTH);
 
   // Активное состояние
-  /*
-  var onLoadError = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background: red; background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 25%, red 25%, red 50%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.3) 75%, red 75%, red); background-size: 50px 50px;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '40px';
-
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
-  };
-  */
 
   var getFiveRandomElements = function (array) {
     var dataCopy = [];
@@ -108,8 +95,6 @@
     var onLoadSuccess = function (data) {
       offersServer = data;
 
-      // window.map.renderPin(getFiveRandomElements());
-
       window.cards.renderCards(getFiveRandomElements());
       window.cards.showCards();
       window.cards.closeCards();
@@ -143,7 +128,6 @@
 
         window.cards.removeCards();
 
-        // window.map.renderPin(typeFilteredOffers);
         window.cards.renderCards(getFiveRandomElements(typeFilteredOffers));
         window.cards.closeCards();
         window.cards.showCards();
@@ -161,7 +145,7 @@
   mapFilters.addEventListener('change', function () {
     var mapCards = map.querySelectorAll('.map__card');
     var mapButtons = mapPinsList.querySelectorAll('button');
-    // console.log(mapButtons);
+
     for (var i = 0; i < mapButtons.length; i++) {
       mapButtons[i].classList.remove('map__pin--active');
     }
