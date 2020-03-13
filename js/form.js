@@ -11,10 +11,22 @@
   var filterHousingType = mapFilters.querySelector('#housing-type');
   var mapFiltersSelect = mapFiltersContainer.querySelectorAll('select');
   var mapFiltersFieldset = mapFiltersContainer.querySelector('fieldset');
+
   var addressInput = adForm.querySelector('#address');
+
+  var adFromPriceInput = adForm.querySelector('#price');
+
+  var adFormType = adForm.querySelector('#type');
+  // var adFormTypeOptions = adFormType.options;
+
+  var adFormTime = adForm.querySelector('.ad-form__element--time');
+  var adFormTimeIn = adFormTime.querySelector('#timein');
+  var adFormTimeOut = adFormTime.querySelector('#timeout');
+
   var adFormRoomNumber = adForm.querySelector('#room_number');
   var adFormCapacity = adForm.querySelector('#capacity');
   var adFormCapacitieOptions = adFormCapacity.options;
+
   var mapPinMain = mapPinsList.querySelector('.map__pin--main');
   var adFormElementSubmit = adForm.querySelector('.ad-form__element--submit');
   var adFormReset = adFormElementSubmit.querySelector('.ad-form__reset');
@@ -200,32 +212,81 @@
   });
 
   // Валидация
-  // сначала тоже должно быть
+  // Количество комнат/Количество мест
   adFormCapacitieOptions[0].setAttribute('disabled', 'disabled');
   adFormCapacitieOptions[1].setAttribute('disabled', 'disabled');
   adFormCapacitieOptions[3].setAttribute('disabled', 'disabled');
+  adFormCapacitieOptions[2].selected = 'true';
 
   adFormRoomNumber.addEventListener('change', function () {
     if (adFormRoomNumber.selectedIndex === 0) {
+      adFormCapacitieOptions[2].selected = 'true';
       adFormCapacitieOptions[2].removeAttribute('disabled');
       adFormCapacitieOptions[0].setAttribute('disabled', 'disabled');
       adFormCapacitieOptions[1].setAttribute('disabled', 'disabled');
       adFormCapacitieOptions[3].setAttribute('disabled', 'disabled');
     } else if (adFormRoomNumber.selectedIndex === 1) {
+      adFormCapacitieOptions[1].selected = 'true';
       adFormCapacitieOptions[1].removeAttribute('disabled');
       adFormCapacitieOptions[2].removeAttribute('disabled');
       adFormCapacitieOptions[0].setAttribute('disabled', 'disabled');
       adFormCapacitieOptions[3].setAttribute('disabled', 'disabled');
     } else if (adFormRoomNumber.selectedIndex === 2) {
+      adFormCapacitieOptions[0].selected = 'false';
       adFormCapacitieOptions[0].removeAttribute('disabled');
       adFormCapacitieOptions[1].removeAttribute('disabled');
       adFormCapacitieOptions[2].removeAttribute('disabled');
       adFormCapacitieOptions[3].setAttribute('disabled', 'disabled');
     } else if (adFormRoomNumber.selectedIndex === 3) {
+      adFormCapacitieOptions[3].selected = 'true';
       adFormCapacitieOptions[3].removeAttribute('disabled');
       adFormCapacitieOptions[0].setAttribute('disabled', 'disabled');
       adFormCapacitieOptions[1].setAttribute('disabled', 'disabled');
       adFormCapacitieOptions[2].setAttribute('disabled', 'disabled');
     }
   });
+
+  // Минимальная цена
+  adFromPriceInput.min = '1000';
+  adFromPriceInput.placeholder = '1000';
+  adFormType.addEventListener('change', function () {
+    if (adFormType.value === 'bungalo') {
+      adFromPriceInput.min = '0';
+      adFromPriceInput.placeholder = '0';
+    }
+    if (adFormType.value === 'flat') {
+      adFromPriceInput.min = '1000';
+      adFromPriceInput.placeholder = '1000';
+    }
+    if (adFormType.value === 'house') {
+      adFromPriceInput.min = '5000';
+      adFromPriceInput.placeholder = '5000';
+    }
+    if (adFormType.value === 'palace') {
+      adFromPriceInput.min = '10000';
+      adFromPriceInput.placeholder = '10000';
+    }
+  });
+
+  // Время заезда/выезда
+
+  var onTimeChange = function (time1, time2) {
+    if (time1.value === '12:00') {
+      time2.value = '12:00';
+    }
+    if (time1.value === '13:00') {
+      time2.value = '13:00';
+    }
+    if (time1.value === '14:00') {
+      time2.value = '14:00';
+    }
+  };
+
+  adFormTimeIn.addEventListener('change', function () {
+    onTimeChange(adFormTimeIn, adFormTimeOut);
+  });
+  adFormTimeOut.addEventListener('change', function () {
+    onTimeChange(adFormTimeOut, adFormTimeIn);
+  });
+
 })();
