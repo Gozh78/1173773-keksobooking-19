@@ -220,21 +220,25 @@
 
   adFormRoomNumber.addEventListener('change', function () {
     if (adFormRoomNumber.selectedIndex === 0) {
+      adFormCapacitieOptions[2].selected = 'true';
       adFormCapacitieOptions[2].removeAttribute('disabled');
       adFormCapacitieOptions[0].setAttribute('disabled', 'disabled');
       adFormCapacitieOptions[1].setAttribute('disabled', 'disabled');
       adFormCapacitieOptions[3].setAttribute('disabled', 'disabled');
     } else if (adFormRoomNumber.selectedIndex === 1) {
+      adFormCapacitieOptions[1].selected = 'true';
       adFormCapacitieOptions[1].removeAttribute('disabled');
       adFormCapacitieOptions[2].removeAttribute('disabled');
       adFormCapacitieOptions[0].setAttribute('disabled', 'disabled');
       adFormCapacitieOptions[3].setAttribute('disabled', 'disabled');
     } else if (adFormRoomNumber.selectedIndex === 2) {
+      adFormCapacitieOptions[0].selected = 'false';
       adFormCapacitieOptions[0].removeAttribute('disabled');
       adFormCapacitieOptions[1].removeAttribute('disabled');
       adFormCapacitieOptions[2].removeAttribute('disabled');
       adFormCapacitieOptions[3].setAttribute('disabled', 'disabled');
     } else if (adFormRoomNumber.selectedIndex === 3) {
+      adFormCapacitieOptions[3].selected = 'true';
       adFormCapacitieOptions[3].removeAttribute('disabled');
       adFormCapacitieOptions[0].setAttribute('disabled', 'disabled');
       adFormCapacitieOptions[1].setAttribute('disabled', 'disabled');
@@ -266,31 +270,6 @@
 
   // Время заезда/выезда
 
-  adFormTimeIn.addEventListener('change', function () {
-    if (adFormTimeIn.value === '12:00') {
-      adFormTimeOut.value = '12:00';
-    }
-    if (adFormTimeIn.value === '13:00') {
-      adFormTimeOut.value = '13:00';
-    }
-    if (adFormTimeIn.value === '14:00') {
-      adFormTimeOut.value = '14:00';
-    }
-  });
-
-  adFormTimeOut.addEventListener('change', function () {
-    if (adFormTimeOut.value === '12:00') {
-      adFormTimeIn.value = '12:00';
-    }
-    if (adFormTimeOut.value === '13:00') {
-      adFormTimeIn.value = '13:00';
-    }
-    if (adFormTimeOut.value === '14:00') {
-      adFormTimeIn.value = '14:00';
-    }
-  });
-
-  /*
   var onTimeChange = function (time1, time2) {
     if (time1.value === '12:00') {
       time2.value = '12:00';
@@ -303,7 +282,11 @@
     }
   };
 
-  adFormTimeIn.addEventListener('change', onTimeChange(adFormTimeIn, adFormTimeOut));
-  adFormTimeOut.addEventListener('change', onTimeChange(adFormTimeOut, adFormTimeIn));
-  */
+  adFormTimeIn.addEventListener('change', function () {
+    onTimeChange(adFormTimeIn, adFormTimeOut);
+  });
+  adFormTimeOut.addEventListener('change', function () {
+    onTimeChange(adFormTimeOut, adFormTimeIn);
+  });
+
 })();
