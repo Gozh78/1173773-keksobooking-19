@@ -58,7 +58,7 @@
   };
 
   var setAddressValue = function (offerAddressX, offerAddressY) {
-    addressInput.value = offerAddressX + ', ' + offerAddressY;
+    addressInput.value = Math.floor(offerAddressX) + ', ' + Math.floor(offerAddressY);
   };
   setDisabledAttribute(adFormFieldsets);
   setDisabledAttribute(mapFiltersSelect);
@@ -108,8 +108,8 @@
       offersServer = data;
 
       window.cards.renderCards(getFiveRandomElements());
-      window.cards.showCards();
-      window.cards.closeCards();
+      window.map.showCards();
+      window.map.closeCards();
 
       filterHousingType.addEventListener('change', function () {
         var typeFilteredOffers;
@@ -138,11 +138,11 @@
           mapButtons[i].remove();
         }
 
-        window.cards.removeCards();
+        window.map.removeCards();
 
         window.cards.renderCards(getFiveRandomElements(typeFilteredOffers));
-        window.cards.closeCards();
-        window.cards.showCards();
+        window.map.closeCards();
+        window.map.showCards();
 
       });
 
@@ -175,7 +175,7 @@
   mapPinMain.addEventListener('keydown', function (evt) {
     window.util.ifEnterEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
         window.data.PIN_HALF_WIDTH, window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_WIDTH + window.data.PIN_PEAK_HEIGHT));
-  });
+  }, {once: true});
 
   var resetForm = function () {
     document.querySelector('.map').classList.add('map--faded');
@@ -199,7 +199,7 @@
       window.util.ifLeftMouseEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
           window.data.PIN_HALF_WIDTH, window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_WIDTH + window.data.PIN_PEAK_HEIGHT));
     }, {once: true});
-    window.cards.removeCards();
+    window.map.removeCards();
   });
 
   adFormReset.addEventListener('keydown', function (evt) {
@@ -208,7 +208,7 @@
       window.util.ifLeftMouseEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
           window.data.PIN_HALF_WIDTH, window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_WIDTH + window.data.PIN_PEAK_HEIGHT));
     }, {once: true});
-    window.cards.removeCards();
+    window.map.removeCards();
   });
 
   // Валидация
@@ -289,4 +289,8 @@
     onTimeChange(adFormTimeOut, adFormTimeIn);
   });
 
+
+  window.form = {
+    setAddressValue: setAddressValue
+  };
 })();
