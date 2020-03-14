@@ -31,6 +31,10 @@
   var adFormElementSubmit = adForm.querySelector('.ad-form__element--submit');
   var adFormReset = adFormElementSubmit.querySelector('.ad-form__reset');
 
+  var successTemplate = document.querySelector('#success').content;
+  var errorTemplate = document.querySelector('#error').content;
+  var main = document.querySelector('main');
+
   var map = document.querySelector('.map');
 
   var offersServer = [];
@@ -186,29 +190,35 @@
       mapButtons[i].remove();
     }
 
+    mapPinMain.style = 'left: ' + window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X + 'px; top:' + window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + 'px;';
+
+    mapFilters.reset();
+    adForm.reset();
+    adFormCapacitieOptions[2].selected = 'true';
+    adFromPriceInput.min = '1000';
+    adFromPriceInput.placeholder = '1000';
+
+    window.map.removeCards();
+
     setDisabledAttribute(adFormFieldsets);
     setDisabledAttribute(mapFiltersSelect);
     setDisabledAttribute(mapFiltersFieldset);
+
     setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X + window.data.PIN_HALF_WIDTH,
         window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_HALF_WIDTH);
+
+    mapPinMain.addEventListener('mousedown', function (evt) {
+      window.util.ifLeftMouseEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
+          window.data.PIN_HALF_WIDTH, window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_WIDTH + window.data.PIN_PEAK_HEIGHT));
+    }, {once: true});
   };
 
   adFormReset.addEventListener('mousedown', function (evt) {
     window.util.ifLeftMouseEventDoAction(evt, resetForm);
-    mapPinMain.addEventListener('mousedown', function () {
-      window.util.ifLeftMouseEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
-          window.data.PIN_HALF_WIDTH, window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_WIDTH + window.data.PIN_PEAK_HEIGHT));
-    }, {once: true});
-    window.map.removeCards();
   });
 
   adFormReset.addEventListener('keydown', function (evt) {
     window.util.ifEnterEventDoAction(evt, resetForm);
-    mapPinMain.addEventListener('mousedown', function () {
-      window.util.ifLeftMouseEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
-          window.data.PIN_HALF_WIDTH, window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_WIDTH + window.data.PIN_PEAK_HEIGHT));
-    }, {once: true});
-    window.map.removeCards();
   });
 
   // Валидация
@@ -269,7 +279,6 @@
   });
 
   // Время заезда/выезда
-
   var onTimeChange = function (time1, time2) {
     if (time1.value === '12:00') {
       time2.value = '12:00';
@@ -289,6 +298,60 @@
     onTimeChange(adFormTimeOut, adFormTimeIn);
   });
 
+  // Отправка формы
+  var onSendSuccess = function () {
+    var successMessage = successTemplate.cloneNode(true);
+
+    main.appendChild(successMessage);
+
+    var successBlock = main.querySelector('.success');
+
+    resetForm();
+
+    document.addEventListener('keydown', function (evt) {
+      window.util.ifEscEventDoAction(evt, function () {
+        successBlock.remove();
+      });
+    });
+
+    document.addEventListener('click', function () {
+      successBlock.remove();
+    });
+  };
+
+  var onSendError = function () {
+    var errorMessage = errorTemplate.cloneNode(true);
+
+    main.appendChild(errorMessage);
+
+    var errorBlock = main.querySelector('.error');
+    var errorButton = errorBlock.querySelector('.error__button');
+
+    errorButton.addEventListener('mousedown', function (evt) {
+      window.util.ifLeftMouseEventDoAction(evt, function () {
+        errorBlock.remove();
+      });
+    });
+
+    document.addEventListener('keydown', function (evt) {
+      window.util.ifEscEventDoAction(evt, function () {
+        errorBlock.remove();
+      });
+    });
+
+    document.addEventListener('click', function () {
+      errorBlock.remove();
+    });
+  };
+
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    var formData = new FormData(adForm);
+
+    formData.append(adForm.querySelector('#address').name, adForm.querySelector('#address').value);
+
+    window.backend.send(formData, onSendSuccess, onSendError);
+  });
 
   window.form = {
     setAddressValue: setAddressValue
