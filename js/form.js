@@ -346,7 +346,11 @@
 
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.send(new FormData(adForm), onSendSuccess, onSendError);
+    var formData = new FormData(adForm);
+
+    formData.append(adForm.querySelector('#address').name, adForm.querySelector('#address').value);
+
+    window.backend.send(formData, onSendSuccess, onSendError);
   });
 
   window.form = {

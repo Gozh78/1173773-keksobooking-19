@@ -15,7 +15,6 @@
       xhr.responseType = 'json';
 
       xhr.open('GET', URL_DATA);
-
       xhr.addEventListener('load', function () {
         if (xhr.status === statusCode.OK) {
           onLoad(xhr.response);
