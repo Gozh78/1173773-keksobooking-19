@@ -50,9 +50,8 @@
         photoElement.src = photosArray[j];
         fragmentPhotos.appendChild(photoElement);
       }
-    } else {
-      return fragmentPhotos;
     }
+
     return fragmentPhotos;
   };
 
