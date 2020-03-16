@@ -6,9 +6,23 @@
 
   var adForm = document.querySelector('.ad-form');
   var adFormFieldsets = adForm.querySelectorAll('fieldset');
+
   var mapFiltersContainer = document.querySelector('.map__filters-container');
   var mapFilters = mapFiltersContainer.querySelector('.map__filters');
+
   var filterHousingType = mapFilters.querySelector('#housing-type');
+  var filterHousingPrice = mapFilters.querySelector('#housing-price');
+  var filterHousingRooms = mapFilters.querySelector('#housing-rooms');
+  var filterHousingGuests = mapFilters.querySelector('#housing-guests');
+
+  var filterHousingFeatures = mapFilters.querySelector('#housing-features');
+  var filterHousingFeatureWifi = filterHousingFeatures.querySelector('#filter-wifi');
+  var filterHousingFeatureDishwasher = filterHousingFeatures.querySelector('#filter-dishwasher');
+  var filterHousingFeatureParking = filterHousingFeatures.querySelector('#filter-parking');
+  var filterHousingFeatureWasher = filterHousingFeatures.querySelector('#filter-washer');
+  var filterHousingFeatureElevator = filterHousingFeatures.querySelector('#filter-elevator');
+  var filterHousingFeatureConditioner = filterHousingFeatures.querySelector('#filter-conditioner');
+
   var mapFiltersSelect = mapFiltersContainer.querySelectorAll('select');
   var mapFiltersFieldset = mapFiltersContainer.querySelector('fieldset');
 
@@ -115,38 +129,121 @@
       window.map.showCards();
       window.map.closeCards();
 
-      filterHousingType.addEventListener('change', function () {
+      mapFilters.addEventListener('change', function () {
+        var offerFilteredType = filterHousingType.value;
+        var offerFilteredPrice = filterHousingPrice.value;
+        var offerFilteredRooms = filterHousingRooms.value;
+        var offerFilteredGuests = filterHousingGuests.value;
+
         var typeFilteredOffers;
-        if (filterHousingType.value === 'palace') {
-          typeFilteredOffers = offersServer.filter(function (oneOffer) {
-            return oneOffer.offer.type === 'palace';
-          });
-        } else if (filterHousingType.value === 'flat') {
-          typeFilteredOffers = offersServer.filter(function (oneOffer) {
-            return oneOffer.offer.type === 'flat';
-          });
-        } else if (filterHousingType.value === 'house') {
-          typeFilteredOffers = offersServer.filter(function (oneOffer) {
-            return oneOffer.offer.type === 'house';
-          });
-        } else if (filterHousingType.value === 'bungalo') {
-          typeFilteredOffers = offersServer.filter(function (oneOffer) {
-            return oneOffer.offer.type === 'bungalo';
-          });
-        } else if (filterHousingType.value === 'any') {
-          typeFilteredOffers = getFiveRandomElements();
-        }
+        typeFilteredOffers = offersServer.filter(function (oneOffer) {
+          if (offerFilteredType === 'any') {
+            return oneOffer;
+          }
 
-        mapButtons = mapPinsList.querySelectorAll('button');
-        for (i = 1; i < mapButtons.length; i++) {
-          mapButtons[i].remove();
-        }
+          return oneOffer.offer.type === offerFilteredType;
+        });
 
-        window.map.removeCards();
+        var priceFilteredOffers;
+        priceFilteredOffers = typeFilteredOffers.filter(function (oneOffer) {
+          if (offerFilteredPrice === 'middle') {
+            return (oneOffer.offer.price >= 10000 && oneOffer.offer.price <= 50000);
+          } else if (offerFilteredPrice === 'low') {
+            return (oneOffer.offer.price < 10000);
+          } else if (offerFilteredPrice === 'high') {
+            return (oneOffer.offer.price > 50000);
+          }
 
-        window.cards.renderCards(getFiveRandomElements(typeFilteredOffers));
-        window.map.closeCards();
-        window.map.showCards();
+          return oneOffer;
+        });
+
+        var roomsFilteredOffers;
+        roomsFilteredOffers = priceFilteredOffers. filter(function (oneOffer) {
+          if (offerFilteredRooms === 'any') {
+            return oneOffer;
+          }
+
+          return oneOffer.offer.rooms === Number(offerFilteredRooms);
+        });
+
+        var guestsFilteredOffers;
+        guestsFilteredOffers = roomsFilteredOffers.filter(function (oneOffer) {
+          if (offerFilteredGuests === 'any') {
+            return oneOffer;
+          }
+
+          return oneOffer.offer.guests === Number(offerFilteredGuests);
+        });
+
+        var wifiFilteredOffers;
+        wifiFilteredOffers = guestsFilteredOffers.filter(function (oneOffer) {
+          if (filterHousingFeatureWifi.checked === true) {
+            return oneOffer.offer.features.includes('wifi');
+          }
+
+          return oneOffer;
+        });
+
+        var dishwasherFilteredOffers;
+        dishwasherFilteredOffers = wifiFilteredOffers.filter(function (oneOffer) {
+          if (filterHousingFeatureDishwasher.checked === true) {
+            return oneOffer.offer.features.includes('dishwasher');
+          }
+
+          return oneOffer;
+        });
+
+        var parkingFilteredOffers;
+        parkingFilteredOffers = dishwasherFilteredOffers.filter(function (oneOffer) {
+          if (filterHousingFeatureParking.checked === true) {
+            return oneOffer.offer.features.includes('parking');
+          }
+
+          return oneOffer;
+        });
+
+        var washerFilteredOffers;
+        washerFilteredOffers = parkingFilteredOffers.filter(function (oneOffer) {
+          if (filterHousingFeatureWasher.checked === true) {
+            return oneOffer.offer.features.includes('washer');
+          }
+
+          return oneOffer;
+        });
+
+        var elevatorFilteredOffers;
+        elevatorFilteredOffers = washerFilteredOffers.filter(function (oneOffer) {
+          if (filterHousingFeatureElevator.checked === true) {
+            return oneOffer.offer.features.includes('elevator');
+          }
+
+          return oneOffer;
+        });
+
+        var conditionerFilteredOffers;
+        conditionerFilteredOffers = elevatorFilteredOffers.filter(function (oneOffer) {
+          if (filterHousingFeatureConditioner.checked === true) {
+            return oneOffer.offer.features.includes('conditioner');
+          }
+
+          return oneOffer;
+        });
+
+        var filteredOffers = conditionerFilteredOffers;
+        var filterOffersWithDelay = window.debounce(function () {
+
+          mapButtons = mapPinsList.querySelectorAll('button');
+          for (i = 1; i < mapButtons.length; i++) {
+            mapButtons[i].remove();
+          }
+
+          window.map.removeCards();
+          window.cards.renderCards(getFiveRandomElements(filteredOffers));
+          window.map.closeCards();
+          window.map.showCards();
+        });
+
+        filterOffersWithDelay();
 
       });
 
