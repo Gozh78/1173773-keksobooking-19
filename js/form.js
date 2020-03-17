@@ -31,7 +31,6 @@
   var adFromPriceInput = adForm.querySelector('#price');
 
   var adFormType = adForm.querySelector('#type');
-  // var adFormTypeOptions = adFormType.options;
 
   var adFormTime = adForm.querySelector('.ad-form__element--time');
   var adFormTimeIn = adFormTime.querySelector('#timein');
