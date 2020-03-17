@@ -3,12 +3,6 @@
 
 (function () {
   var MAX_NUMBER_OF_OFFERS = 5;
-  var priceMin = 0;
-  var priceMax = 10000;
-  var roomsMin = 1;
-  var roomsMax = 100;
-  var guestsMin = 1;
-  var guestsMax = 100;
   var MAP_MIN_COORDINATE_X = 0;
   var MAP_MAX_COORDINATE_X = 1200;
   var MAP_MIN_COORDINATE_Y = 130;
@@ -18,6 +12,16 @@
   var PIN_PEAK_HEIGHT = 20;
   var MAIN_PIN_LEFT_TOP_COORDINATE_X = 570;
   var MAIN_PIN_LEFT_TOP_COORDINATE_Y = 375;
+
+  var AVATAR_SRC = 'img/muffin-grey.svg';
+
+  var priceMin = 0;
+  var priceMax = 10000;
+  var roomsMin = 1;
+  var roomsMax = 100;
+  var guestsMin = 1;
+  var guestsMax = 100;
+
 
   var offerTitleArray = [];
   var offerDescriptionArray = [];
@@ -100,6 +104,7 @@
     PIN_PEAK_HEIGHT: PIN_PEAK_HEIGHT,
     MAIN_PIN_LEFT_TOP_COORDINATE_X: MAIN_PIN_LEFT_TOP_COORDINATE_X,
     MAIN_PIN_LEFT_TOP_COORDINATE_Y: MAIN_PIN_LEFT_TOP_COORDINATE_Y,
-    makeOffersArray: makeOffersArray
+    makeOffersArray: makeOffersArray,
+    AVATAR_SRC: AVATAR_SRC
   };
 })();

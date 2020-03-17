@@ -4,10 +4,10 @@
 (function () {
   var URL_DATA = 'https://js.dump.academy/keksobooking/data';
   var URL = 'https://js.dump.academy/keksobooking';
+  var TIMEOUT_IN_MS = 10000;
   var statusCode = {
     OK: 200
   };
-  var TIMEOUT_IN_MS = 10000;
 
   window.backend = {
     load: function (onLoad, onError) {

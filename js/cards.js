@@ -45,7 +45,7 @@
     var fragmentPhotos = document.createDocumentFragment();
 
     if (photosArray.length !== 0) {
-      for (var j = 0/* 1*/; j < photosArray.length; j++) {
+      for (var j = 0; j < photosArray.length; j++) {
         var photoElement = mapCardTemplate.querySelector('.popup__photo').cloneNode(true);
         photoElement.src = photosArray[j];
         fragmentPhotos.appendChild(photoElement);

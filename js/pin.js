@@ -6,7 +6,6 @@
   var mapPinsTemplate = document.querySelector('#pin').content;
 
   var renderPin = function (offers) {
-    // создаёт пины
     var fragmentPins = document.createDocumentFragment();
     for (var i = 0; i < offers.length; i++) {
       var pinElement = mapPinsTemplate.cloneNode(true);
