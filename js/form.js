@@ -44,21 +44,45 @@
   // Неактивное состояние
 
   var setDisabledAttribute = function (arr) {
-    if (Object.keys(arr).length === 0) {
-      arr.setAttribute('disabled', 'disabled');
+    if (Object.keys(arr).length !== 0) {
+      arr.forEach(function (item) {
+        if (Object.keys(item).length === 0) {
+          item.setAttribute('disabled', 'disabled');
+        } else {
+          for (var i = 0; i < item.length; i++) {
+            item[i].setAttribute('disabled', 'disabled');
+          }
+        }
+      });
     } else {
-      for (var i = 0; i < arr.length; i++) {
-        arr[i].setAttribute('disabled', 'disabled');
+      if (Object.keys(arr).length === 0) {
+        arr.setAttribute('disabled', 'disabled');
+      } else {
+        for (var i = 0; i < arr.length; i++) {
+          arr[i].setAttribute('disabled', 'disabled');
+        }
       }
     }
   };
 
   var removeDisabledAttribute = function (arr) {
-    if (Object.keys(arr).length === 0) {
-      arr.removeAttribute('disabled');
+    if (Object.keys(arr).length !== 0) {
+      arr.forEach(function (item) {
+        if (Object.keys(item).length === 0) {
+          item.removeAttribute('disabled');
+        } else {
+          for (var i = 0; i < item.length; i++) {
+            item[i].removeAttribute('disabled');
+          }
+        }
+      });
     } else {
-      for (var i = 0; i < arr.length; i++) {
-        arr[i].removeAttribute('disabled');
+      if (Object.keys(arr).length === 0) {
+        arr.removeAttribute('disabled');
+      } else {
+        for (var i = 0; i < arr.length; i++) {
+          arr[i].removeAttribute('disabled');
+        }
       }
     }
   };
@@ -66,15 +90,14 @@
   var setAddressValue = function (offerAddressX, offerAddressY) {
     addressInput.value = Math.floor(offerAddressX) + ', ' + Math.floor(offerAddressY);
   };
-  setDisabledAttribute(adFormFieldsets);
-  setDisabledAttribute(mapFiltersSelect);
-  setDisabledAttribute(mapFiltersFieldset);
+
+  setDisabledAttribute([adFormFieldsets, mapFiltersSelect, mapFiltersFieldset]);
   setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X + window.data.PIN_HALF_WIDTH,
       window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_HALF_WIDTH);
 
   // Активное состояние
 
-  var getFiveRandomElements = function (array) {
+  var getRandomOffers = function (offersAmount, array) {
     var dataCopy = [];
     if (array) {
       dataCopy = array;
@@ -86,14 +109,14 @@
     var dataFiveElements = [];
     var numberOffers;
 
-    if (dataCopy.length < window.data.MAX_NUMBER_OF_OFFERS) {
+    if (dataCopy.length < offersAmount) {
       numberOffers = dataCopy.length;
     } else {
-      numberOffers = window.data.MAX_NUMBER_OF_OFFERS;
+      numberOffers = offersAmount;
     }
 
     for (var i = 0; i < numberOffers; i++) {
-      var randomNumber = window.util.randomInteger(0, initialDataLength - 1);
+      var randomNumber = window.util.getRandomInteger(0, initialDataLength - 1);
       dataFiveElements[i] = dataCopy[randomNumber];
       dataCopy.splice(randomNumber, 1);
       initialDataLength = initialDataLength - 1;
@@ -113,7 +136,7 @@
     var onLoadSuccess = function (data) {
       offersServer = data;
 
-      window.cards.renderCards(getFiveRandomElements());
+      window.cards.renderCards(getRandomOffers(window.data.MAX_NUMBER_OF_OFFERS));
       window.map.showCards();
       window.map.closeCards();
 
@@ -127,7 +150,7 @@
           }
 
           window.map.removeCards();
-          window.cards.renderCards(getFiveRandomElements(window.mapFilter.onFilterChange(offersServer)));
+          window.cards.renderCards(getRandomOffers(window.data.MAX_NUMBER_OF_OFFERS, window.mapFilter.onFilterChange(offersServer)));
           window.map.closeCards();
           window.map.showCards();
         });
@@ -136,9 +159,7 @@
 
       });
 
-      removeDisabledAttribute(adFormFieldsets);
-      removeDisabledAttribute(mapFiltersSelect);
-      removeDisabledAttribute(mapFiltersFieldset);
+      removeDisabledAttribute([adFormFieldsets, mapFiltersSelect, mapFiltersFieldset]);
     };
 
     window.backend.load(onLoadSuccess, window.backend.onLoadError);
@@ -193,9 +214,7 @@
 
     window.map.removeCards();
 
-    setDisabledAttribute(adFormFieldsets);
-    setDisabledAttribute(mapFiltersSelect);
-    setDisabledAttribute(mapFiltersFieldset);
+    setDisabledAttribute([adFormFieldsets, mapFiltersSelect, mapFiltersFieldset]);
 
     setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X + window.data.PIN_HALF_WIDTH,
         window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_HALF_WIDTH);
