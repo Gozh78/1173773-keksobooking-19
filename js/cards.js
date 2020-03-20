@@ -45,45 +45,45 @@
     var fragmentPhotos = document.createDocumentFragment();
 
     if (photosArray.length !== 0) {
-      for (var j = 0; j < photosArray.length; j++) {
+      photosArray.forEach(function (item) {
         var photoElement = mapCardTemplate.querySelector('.popup__photo').cloneNode(true);
-        photoElement.src = photosArray[j];
+        photoElement.src = item;
         fragmentPhotos.appendChild(photoElement);
-      }
+      });
     }
 
     return fragmentPhotos;
   };
 
-  var renderCards = function (offers) {
+  var renderElement = function (offers) {
     var fragmentCards = document.createDocumentFragment();
 
-    for (var i = 0; i < offers.length; i++) {
+    offers.forEach(function (item) {
       var cardElement = mapCardTemplate.cloneNode(true);
 
-      cardElement.querySelector('.popup__avatar').src = offers[i].author.avatar;
-      cardElement.querySelector('.popup__title').textContent = offers[i].offer.title;
-      cardElement.querySelector('.popup__text--address').textContent = offers[i].offer.address;
-      cardElement.querySelector('.popup__text--price').innerHTML = offers[i].offer.price + '&#x20bd;' + '<span>/ночь</span>';
+      cardElement.querySelector('.popup__avatar').src = item.author.avatar;
+      cardElement.querySelector('.popup__title').textContent = item.offer.title;
+      cardElement.querySelector('.popup__text--address').textContent = item.offer.address;
+      cardElement.querySelector('.popup__text--price').innerHTML = item.offer.price + '&#x20bd;' + '<span>/ночь</span>';
 
-      setCapacity(offers[i].offer.rooms, offers[i].offer.guests, cardElement);
+      setCapacity(item.offer.rooms, item.offer.guests, cardElement);
 
-      cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + offers[i].offer.checkin + ', выезд до ' + offers[i].offer.checkout;
-      cardElement.querySelector('.popup__description').textContent = offers[i].offer.description;
+      cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout;
+      cardElement.querySelector('.popup__description').textContent = item.offer.description;
 
-      getOfferType(offers[i].offer.type, cardElement);
+      getOfferType(item.offer.type, cardElement);
 
-      removeElementIfIncluded(offers[i].offer.features, 'wifi', cardElement, '.popup__feature--wifi');
-      removeElementIfIncluded(offers[i].offer.features, 'dishwasher', cardElement, '.popup__feature--dishwasher');
-      removeElementIfIncluded(offers[i].offer.features, 'parking', cardElement, '.popup__feature--parking');
-      removeElementIfIncluded(offers[i].offer.features, 'washer', cardElement, '.popup__feature--washer');
-      removeElementIfIncluded(offers[i].offer.features, 'elevator', cardElement, '.popup__feature--elevator');
-      removeElementIfIncluded(offers[i].offer.features, 'conditioner', cardElement, '.popup__feature--conditioner');
+      removeElementIfIncluded(item.offer.features, 'wifi', cardElement, '.popup__feature--wifi');
+      removeElementIfIncluded(item.offer.features, 'dishwasher', cardElement, '.popup__feature--dishwasher');
+      removeElementIfIncluded(item.offer.features, 'parking', cardElement, '.popup__feature--parking');
+      removeElementIfIncluded(item.offer.features, 'washer', cardElement, '.popup__feature--washer');
+      removeElementIfIncluded(item.offer.features, 'elevator', cardElement, '.popup__feature--elevator');
+      removeElementIfIncluded(item.offer.features, 'conditioner', cardElement, '.popup__feature--conditioner');
 
-      cardElement.querySelector('.popup__photos').appendChild(makePhotoElements(offers[i].offer.photos));
+      cardElement.querySelector('.popup__photos').appendChild(makePhotoElements(item.offer.photos));
 
       fragmentCards.appendChild(cardElement);
-    }
+    });
 
     map.insertBefore(fragmentCards, mapFiltersContainer);
 
@@ -91,7 +91,7 @@
       item.querySelector('.popup__photos').querySelector('.popup__photo').remove();
     });
 
-    window.pin.renderPin(offers);
+    window.pin.renderElement(offers);
 
     // скрытие карточек
     var mapCards = map.querySelectorAll('.map__card');
@@ -102,6 +102,6 @@
   };
 
   window.cards = {
-    renderCards: renderCards
+    renderElement: renderElement
   };
 })();

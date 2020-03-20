@@ -6,15 +6,15 @@
   var mapPinsList = document.querySelector('.map__pins');
 
   var changePinsAndCards = function (pins, cards, index) {
-    for (var j = 0; j < pins.length; j++) {
-      pins[j].classList.remove('map__pin--active');
-    }
+    pins.forEach(function (item) {
+      item.classList.remove('map__pin--active');
+    });
 
     pins[index].classList.add('map__pin--active');
 
-    for (j = 0; j < cards.length; j++) {
-      cards[j].classList.add('hidden');
-    }
+    cards.forEach(function (item) {
+      item.classList.add('hidden');
+    });
 
     cards[index - 1].classList.remove('hidden');
   };
@@ -23,8 +23,9 @@
     var mapCards = map.querySelectorAll('.map__card');
     var mapButtons = mapPinsList.querySelectorAll('button');
 
-    mapButtons.forEach(function (item, i) {
-      if (i !== 0) {
+    for (var j = 1; j < mapButtons.length; j++) {
+      (function (i) {
+        var item = mapButtons[i];
         item.addEventListener('mousedown', function (evt) {
           window.util.ifLeftMouseEventDoAction(evt, function () {
             changePinsAndCards(mapButtons, mapCards, i);
@@ -36,8 +37,8 @@
             changePinsAndCards(mapButtons, mapCards, i);
           });
         });
-      }
-    });
+      }(j));
+    }
   };
 
   var closeCards = function () {
@@ -78,13 +79,13 @@
   };
 
   var onDocumentEscPress = function (evt) {
-    var mapCards = map.querySelectorAll('.map__card');
-    var mapButtons = mapPinsList.querySelectorAll('button');
     window.util.ifEscEventDoAction(evt, function () {
+      var mapCards = map.querySelectorAll('.map__card');
+      var mapButtons = mapPinsList.querySelectorAll('button');
 
-      for (var i = 0; i < mapButtons.length; i++) {
-        mapButtons[i].classList.remove('map__pin--active');
-      }
+      mapButtons.forEach(function (item) {
+        item.classList.remove('map__pin--active');
+      });
 
       mapCards.forEach(function (item) {
         item.classList.add('hidden');

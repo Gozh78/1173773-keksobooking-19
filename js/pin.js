@@ -5,23 +5,23 @@
   var mapPinsList = document.querySelector('.map__pins');
   var mapPinsTemplate = document.querySelector('#pin').content;
 
-  var renderPin = function (offers) {
+  var renderElement = function (offers) {
     var fragmentPins = document.createDocumentFragment();
-    for (var i = 0; i < offers.length; i++) {
+    offers.forEach(function (item) {
       var pinElement = mapPinsTemplate.cloneNode(true);
 
-      pinElement.querySelector('.map__pin').style = 'left: ' + (offers[i].location.x - window.data.PIN_HALF_WIDTH) + 'px; top:' + (offers[i].location.y - window.data.PIN_WIDTH - window.data.PIN_PEAK_HEIGHT) + 'px;';
-      pinElement.querySelector('img').src = offers[i].author.avatar;
-      pinElement.querySelector('img').alt = offers[i].offer.title;
+      pinElement.querySelector('.map__pin').style = 'left: ' + (item.location.x - window.data.PIN_HALF_WIDTH) + 'px; top:' + (item.location.y - window.data.PIN_WIDTH - window.data.PIN_PEAK_HEIGHT) + 'px;';
+      pinElement.querySelector('img').src = item.author.avatar;
+      pinElement.querySelector('img').alt = item.offer.title;
 
       fragmentPins.appendChild(pinElement);
-    }
+    });
 
     mapPinsList.appendChild(fragmentPins);
 
   };
 
   window.pin = {
-    renderPin: renderPin
+    renderElement: renderElement
   };
 })();

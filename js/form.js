@@ -49,18 +49,18 @@
         if (Object.keys(item).length === 0) {
           item.setAttribute('disabled', 'disabled');
         } else {
-          for (var i = 0; i < item.length; i++) {
-            item[i].setAttribute('disabled', 'disabled');
-          }
+          item.forEach(function (element) {
+            element.setAttribute('disabled', 'disabled');
+          });
         }
       });
     } else {
       if (Object.keys(arr).length === 0) {
         arr.setAttribute('disabled', 'disabled');
       } else {
-        for (var i = 0; i < arr.length; i++) {
-          arr[i].setAttribute('disabled', 'disabled');
-        }
+        arr.forEach(function (element) {
+          element.setAttribute('disabled', 'disabled');
+        });
       }
     }
   };
@@ -71,18 +71,18 @@
         if (Object.keys(item).length === 0) {
           item.removeAttribute('disabled');
         } else {
-          for (var i = 0; i < item.length; i++) {
-            item[i].removeAttribute('disabled');
-          }
+          item.forEach(function (element) {
+            element.removeAttribute('disabled', 'disabled');
+          });
         }
       });
     } else {
       if (Object.keys(arr).length === 0) {
         arr.removeAttribute('disabled');
       } else {
-        for (var i = 0; i < arr.length; i++) {
-          arr[i].removeAttribute('disabled');
-        }
+        arr.forEach(function (element) {
+          element.removeAttribute('disabled', 'disabled');
+        });
       }
     }
   };
@@ -99,21 +99,13 @@
 
   var getRandomOffers = function (offersAmount, array) {
     var dataCopy = [];
-    if (array) {
-      dataCopy = array;
-    } else {
-      dataCopy = offersServer.slice();
-    }
+    dataCopy = array ? array : offersServer.slice();
 
     var initialDataLength = dataCopy.length;
     var dataFiveElements = [];
-    var numberOffers;
 
-    if (dataCopy.length < offersAmount) {
-      numberOffers = dataCopy.length;
-    } else {
-      numberOffers = offersAmount;
-    }
+    var numberOffers;
+    numberOffers = (dataCopy.length < offersAmount) ? dataCopy.length : offersAmount;
 
     for (var i = 0; i < numberOffers; i++) {
       var randomNumber = window.util.getRandomInteger(0, initialDataLength - 1);
@@ -125,6 +117,9 @@
   };
 
   var setPageActive = function () {
+    mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
+    mapPinMain.removeEventListener('keydown', onMainPinKeyDown);
+
     var mapButtons = mapPinsList.querySelectorAll('button');
     document.querySelector('.map').classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
@@ -136,21 +131,29 @@
     var onLoadSuccess = function (data) {
       offersServer = data;
 
-      window.cards.renderCards(getRandomOffers(window.data.MAX_NUMBER_OF_OFFERS));
+      window.cards.renderElement(getRandomOffers(window.data.MAX_NUMBER_OF_OFFERS));
       window.map.showCards();
       window.map.closeCards();
 
       mapFilters.addEventListener('change', function () {
+        var mapCards = map.querySelectorAll('.map__card');
+        mapButtons = mapPinsList.querySelectorAll('button');
+
+        mapButtons.forEach(function (item) {
+          item.classList.remove('map__pin--active');
+        });
+
+        mapCards.forEach(function (item) {
+          item.classList.add('hidden');
+        });
 
         var filterOffersWithDelay = window.debounce(function () {
-
-          mapButtons = mapPinsList.querySelectorAll('button');
           for (i = 1; i < mapButtons.length; i++) {
             mapButtons[i].remove();
           }
 
           window.map.removeCards();
-          window.cards.renderCards(getRandomOffers(window.data.MAX_NUMBER_OF_OFFERS, window.mapFilter.onFilterChange(offersServer)));
+          window.cards.renderElement(getRandomOffers(window.data.MAX_NUMBER_OF_OFFERS, window.mapFilter.onFilterChange(offersServer)));
           window.map.closeCards();
           window.map.showCards();
         });
@@ -165,28 +168,16 @@
     window.backend.load(onLoadSuccess, window.backend.onLoadError);
   };
 
-  mapFilters.addEventListener('change', function () {
-    var mapCards = map.querySelectorAll('.map__card');
-    var mapButtons = mapPinsList.querySelectorAll('button');
+  var onMainPinMouseDown = function (evt) {
+    window.util.ifLeftMouseEventDoAction(evt, setPageActive);
+  };
 
-    for (var i = 0; i < mapButtons.length; i++) {
-      mapButtons[i].classList.remove('map__pin--active');
-    }
+  var onMainPinKeyDown = function (evt) {
+    window.util.ifEnterEventDoAction(evt, setPageActive);
+  };
 
-    mapCards.forEach(function (item) {
-      item.classList.add('hidden');
-    });
-  });
-
-  mapPinMain.addEventListener('mousedown', function (evt) {
-    window.util.ifLeftMouseEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
-        window.data.PIN_HALF_WIDTH, window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_WIDTH + window.data.PIN_PEAK_HEIGHT));
-  }, {once: true});
-
-  mapPinMain.addEventListener('keydown', function (evt) {
-    window.util.ifEnterEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
-        window.data.PIN_HALF_WIDTH, window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_WIDTH + window.data.PIN_PEAK_HEIGHT));
-  }, {once: true});
+  mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
+  mapPinMain.addEventListener('keydown', onMainPinKeyDown);
 
   var onFormReset = function () {
     document.querySelector('.map').classList.add('map--faded');
@@ -203,6 +194,7 @@
     adForm.reset();
 
     avatarPreview.src = window.data.AVATAR_SRC;
+
     var housePhotoPreviews = adForm.querySelectorAll('.ad-form__photo');
     for (i = 0; i < housePhotoPreviews.length - 1; i++) {
       housePhotoPreviews[i].remove();
@@ -219,10 +211,8 @@
     setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X + window.data.PIN_HALF_WIDTH,
         window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_HALF_WIDTH);
 
-    mapPinMain.addEventListener('mousedown', function (evt) {
-      window.util.ifLeftMouseEventDoAction(evt, setPageActive, setAddressValue(window.data.MAIN_PIN_LEFT_TOP_COORDINATE_X +
-          window.data.PIN_HALF_WIDTH, window.data.MAIN_PIN_LEFT_TOP_COORDINATE_Y + window.data.PIN_WIDTH + window.data.PIN_PEAK_HEIGHT));
-    }, {once: true});
+    mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
+    mapPinMain.addEventListener('keydown', onMainPinKeyDown);
   };
 
   adFormReset.addEventListener('mousedown', function (evt) {
@@ -320,15 +310,23 @@
 
     onFormReset();
 
-    document.addEventListener('keydown', function (evt) {
+    var onDocumentEscapePress = function (evt) {
       window.util.ifEscEventDoAction(evt, function () {
         successBlock.remove();
       });
-    });
+      document.removeEventListener('keydown', onDocumentEscapePress);
+      document.removeEventListener('click', onDocumentClick);
+    };
 
-    document.addEventListener('click', function () {
+    var onDocumentClick = function () {
       successBlock.remove();
-    });
+      document.removeEventListener('click', onDocumentClick);
+      document.removeEventListener('keydown', onDocumentEscapePress);
+    };
+
+    document.addEventListener('keydown', onDocumentEscapePress);
+
+    document.addEventListener('click', onDocumentClick);
   };
 
   var onSendError = function () {

@@ -15,6 +15,97 @@
   var filterHousingFeatureWasher = filterHousingFeatures.querySelector('#filter-washer');
   var filterHousingFeatureElevator = filterHousingFeatures.querySelector('#filter-elevator');
   var filterHousingFeatureConditioner = filterHousingFeatures.querySelector('#filter-conditioner');
+  /*
+  var includeFeature = function (offer, feature, checkbox) {
+    if (checkbox.checked) {
+      return offer.offer.features.includes(feature);
+    }
+
+    return offer;
+  };
+  */
+  var filterFeatures = function (offers) {
+    var wifiFilteredOffers;
+    wifiFilteredOffers = offers.filter(function (oneOffer) {
+      // includeFeature(oneOffer, 'wifi', filterHousingFeatureWifi);
+      if (filterHousingFeatureWifi.checked) {
+        return oneOffer.offer.features.includes('wifi');
+      }
+
+      return oneOffer;
+    });
+
+    if (wifiFilteredOffers.length === 0) {
+      return [];
+    }
+
+    var dishwasherFilteredOffers;
+    dishwasherFilteredOffers = wifiFilteredOffers.filter(function (oneOffer) {
+      if (filterHousingFeatureDishwasher.checked) {
+        return oneOffer.offer.features.includes('dishwasher');
+      }
+
+      return oneOffer;
+    });
+
+    if (dishwasherFilteredOffers.length === 0) {
+      return [];
+    }
+
+    var parkingFilteredOffers;
+    parkingFilteredOffers = dishwasherFilteredOffers.filter(function (oneOffer) {
+      if (filterHousingFeatureParking.checked) {
+        return oneOffer.offer.features.includes('parking');
+      }
+
+      return oneOffer;
+    });
+
+    if (parkingFilteredOffers.length === 0) {
+      return [];
+    }
+
+    var washerFilteredOffers;
+    washerFilteredOffers = parkingFilteredOffers.filter(function (oneOffer) {
+      if (filterHousingFeatureWasher.checked) {
+        return oneOffer.offer.features.includes('washer');
+      }
+
+      return oneOffer;
+    });
+
+    if (washerFilteredOffers.length === 0) {
+      return [];
+    }
+
+    var elevatorFilteredOffers;
+    elevatorFilteredOffers = washerFilteredOffers.filter(function (oneOffer) {
+      if (filterHousingFeatureElevator.checked) {
+        return oneOffer.offer.features.includes('elevator');
+      }
+
+      return oneOffer;
+    });
+
+    if (elevatorFilteredOffers.length === 0) {
+      return [];
+    }
+
+    var conditionerFilteredOffers;
+    conditionerFilteredOffers = elevatorFilteredOffers.filter(function (oneOffer) {
+      if (filterHousingFeatureConditioner.checked) {
+        return oneOffer.offer.features.includes('conditioner');
+      }
+
+      return oneOffer;
+    });
+
+    if (conditionerFilteredOffers.length === 0) {
+      return [];
+    }
+
+    return conditionerFilteredOffers;
+  };
 
   var onFilterChange = function (data) {
     var offerFilteredType = filterHousingType.value;
@@ -31,6 +122,10 @@
       return oneOffer.offer.type === offerFilteredType;
     });
 
+    if (typeFilteredOffers.length === 0) {
+      return [];
+    }
+
     var priceFilteredOffers;
     priceFilteredOffers = typeFilteredOffers.filter(function (oneOffer) {
       if (offerFilteredPrice === 'middle') {
@@ -44,6 +139,10 @@
       return oneOffer;
     });
 
+    if (priceFilteredOffers.length === 0) {
+      return [];
+    }
+
     var roomsFilteredOffers;
     roomsFilteredOffers = priceFilteredOffers. filter(function (oneOffer) {
       if (offerFilteredRooms === 'any') {
@@ -52,6 +151,10 @@
 
       return oneOffer.offer.rooms === Number(offerFilteredRooms);
     });
+
+    if (roomsFilteredOffers.length === 0) {
+      return [];
+    }
 
     var guestsFilteredOffers;
     guestsFilteredOffers = roomsFilteredOffers.filter(function (oneOffer) {
@@ -62,61 +165,11 @@
       return oneOffer.offer.guests === Number(offerFilteredGuests);
     });
 
-    var wifiFilteredOffers;
-    wifiFilteredOffers = guestsFilteredOffers.filter(function (oneOffer) {
-      if (filterHousingFeatureWifi.checked === true) {
-        return oneOffer.offer.features.includes('wifi');
-      }
+    if (guestsFilteredOffers.length === 0) {
+      return [];
+    }
 
-      return oneOffer;
-    });
-
-    var dishwasherFilteredOffers;
-    dishwasherFilteredOffers = wifiFilteredOffers.filter(function (oneOffer) {
-      if (filterHousingFeatureDishwasher.checked === true) {
-        return oneOffer.offer.features.includes('dishwasher');
-      }
-
-      return oneOffer;
-    });
-
-    var parkingFilteredOffers;
-    parkingFilteredOffers = dishwasherFilteredOffers.filter(function (oneOffer) {
-      if (filterHousingFeatureParking.checked === true) {
-        return oneOffer.offer.features.includes('parking');
-      }
-
-      return oneOffer;
-    });
-
-    var washerFilteredOffers;
-    washerFilteredOffers = parkingFilteredOffers.filter(function (oneOffer) {
-      if (filterHousingFeatureWasher.checked === true) {
-        return oneOffer.offer.features.includes('washer');
-      }
-
-      return oneOffer;
-    });
-
-    var elevatorFilteredOffers;
-    elevatorFilteredOffers = washerFilteredOffers.filter(function (oneOffer) {
-      if (filterHousingFeatureElevator.checked === true) {
-        return oneOffer.offer.features.includes('elevator');
-      }
-
-      return oneOffer;
-    });
-
-    var conditionerFilteredOffers;
-    conditionerFilteredOffers = elevatorFilteredOffers.filter(function (oneOffer) {
-      if (filterHousingFeatureConditioner.checked === true) {
-        return oneOffer.offer.features.includes('conditioner');
-      }
-
-      return oneOffer;
-    });
-
-    var filteredOffers = conditionerFilteredOffers;
+    var filteredOffers = filterFeatures(guestsFilteredOffers);
     return filteredOffers;
   };
 
