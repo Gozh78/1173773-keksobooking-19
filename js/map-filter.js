@@ -15,7 +15,7 @@
   var filterHousingFeatureWasher = filterHousingFeatures.querySelector('#filter-washer');
   var filterHousingFeatureElevator = filterHousingFeatures.querySelector('#filter-elevator');
   var filterHousingFeatureConditioner = filterHousingFeatures.querySelector('#filter-conditioner');
-  /*
+
   var includeFeature = function (offer, feature, checkbox) {
     if (checkbox.checked) {
       return offer.offer.features.includes(feature);
@@ -23,16 +23,11 @@
 
     return offer;
   };
-  */
+
   var filterFeatures = function (offers) {
     var wifiFilteredOffers;
     wifiFilteredOffers = offers.filter(function (oneOffer) {
-      // includeFeature(oneOffer, 'wifi', filterHousingFeatureWifi);
-      if (filterHousingFeatureWifi.checked) {
-        return oneOffer.offer.features.includes('wifi');
-      }
-
-      return oneOffer;
+      return includeFeature(oneOffer, 'wifi', filterHousingFeatureWifi);
     });
 
     if (wifiFilteredOffers.length === 0) {
@@ -41,11 +36,7 @@
 
     var dishwasherFilteredOffers;
     dishwasherFilteredOffers = wifiFilteredOffers.filter(function (oneOffer) {
-      if (filterHousingFeatureDishwasher.checked) {
-        return oneOffer.offer.features.includes('dishwasher');
-      }
-
-      return oneOffer;
+      return includeFeature(oneOffer, 'dishwasher', filterHousingFeatureDishwasher);
     });
 
     if (dishwasherFilteredOffers.length === 0) {
@@ -54,11 +45,7 @@
 
     var parkingFilteredOffers;
     parkingFilteredOffers = dishwasherFilteredOffers.filter(function (oneOffer) {
-      if (filterHousingFeatureParking.checked) {
-        return oneOffer.offer.features.includes('parking');
-      }
-
-      return oneOffer;
+      return includeFeature(oneOffer, 'parking', filterHousingFeatureParking);
     });
 
     if (parkingFilteredOffers.length === 0) {
@@ -67,11 +54,7 @@
 
     var washerFilteredOffers;
     washerFilteredOffers = parkingFilteredOffers.filter(function (oneOffer) {
-      if (filterHousingFeatureWasher.checked) {
-        return oneOffer.offer.features.includes('washer');
-      }
-
-      return oneOffer;
+      return includeFeature(oneOffer, 'washer', filterHousingFeatureWasher);
     });
 
     if (washerFilteredOffers.length === 0) {
@@ -80,11 +63,7 @@
 
     var elevatorFilteredOffers;
     elevatorFilteredOffers = washerFilteredOffers.filter(function (oneOffer) {
-      if (filterHousingFeatureElevator.checked) {
-        return oneOffer.offer.features.includes('elevator');
-      }
-
-      return oneOffer;
+      return includeFeature(oneOffer, 'elevator', filterHousingFeatureElevator);
     });
 
     if (elevatorFilteredOffers.length === 0) {
@@ -93,11 +72,7 @@
 
     var conditionerFilteredOffers;
     conditionerFilteredOffers = elevatorFilteredOffers.filter(function (oneOffer) {
-      if (filterHousingFeatureConditioner.checked) {
-        return oneOffer.offer.features.includes('conditioner');
-      }
-
-      return oneOffer;
+      return includeFeature(oneOffer, 'conditioner', filterHousingFeatureConditioner);
     });
 
     if (conditionerFilteredOffers.length === 0) {
